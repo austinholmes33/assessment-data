@@ -257,7 +257,7 @@ module.exports = {
             INSERT INTO cities (name, rating, country_id)
             SELECT cities.name, cities.rating, cities.country_id
             FROM cities
-            WHERE cities.name= '${name}' AND cities.rating = ${rating} AND cities.country_id = '${country_id}';
+            WHERE cities.name= '${name}' AND cities.rating = ${rating} AND cities.country_id = ${country_id};
         `)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
@@ -273,7 +273,6 @@ module.exports = {
             FROM cities
             JOIN countries
             ON countries.country_id = cities.country_id
-
         `)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
