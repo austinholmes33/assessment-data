@@ -29,9 +29,9 @@ module.exports = {
                 country_id INT REFERENCES countries(country_id)
             );
 
-            INSERT INTO cities (name, rating)
+            INSERT INTO cities (name, rating, country_id)
             VALUES ('Mexico City', 1),
-            ('San Jose', 2),
+            ('San Jose', 2, Costa Rica),
             ('Beijing', 3);
 
             insert into countries (name)
@@ -254,8 +254,10 @@ module.exports = {
         const country_id = req.body.country_id
 
         sequelize.query(`
-            INSERT INTO cities (name, rating, cities.country_id)
-            VALUES (${name}, ${rating}, ${country_id});
+            INSERT INTO cities (name, rating, country_id)
+            SELECT cities.name, cities.rating, cities.country_id
+            FROM cities
+            WHERE cities.name= '${name}' AND cities.rating = ${rating} AND cities.country_id = '${country_id}';
         `)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
