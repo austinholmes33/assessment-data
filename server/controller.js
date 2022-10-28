@@ -25,8 +25,8 @@ module.exports = {
             CREATE TABLE cities (
                 city_id SERIAL PRIMARY KEY,
                 name VARCHAR NOT NULL UNIQUE,
-                rating INT NOT NULL,
-                country_id INT REFERENCES countries(country_id)
+                rating INTEGER NOT NULL,
+                country_id INTEGER REFERENCES countries(country_id)
             );
 
             INSERT INTO cities (name, rating, country_id)
@@ -249,15 +249,12 @@ module.exports = {
     },
 
     createCity: (req, res) => {
-        const name = req.body.name
-        const rating = req.body.rating
-        const country_id = req.body.country_id
+        const { name, rating, countryId } = req.body
+
 
         sequelize.query(`
             INSERT INTO cities (name, rating, country_id)
-            SELECT cities.name, cities.rating, cities.country_id
-            FROM cities
-            WHERE cities.name= '${name}' AND cities.rating = ${rating} AND cities.country_id = ${country_id};
+            VALUES('${name}', ${rating}, ${countryId});
         `)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
@@ -269,11 +266,11 @@ module.exports = {
 
     getCities: (req, res) => {
         sequelize.query(`
-            SELECT city_id, cities.name AS city, rating, countries.country_id, countries.name AS country
+            SELECT cities.city_id, cities.name AS city, cities.rating, countries.country_id, countries.name AS country
             FROM cities
             JOIN countries
             ON countries.country_id = cities.country_id
-            ORDER BY rating ASC
+            ORDER BY rating DESC
         `)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
@@ -284,12 +281,12 @@ module.exports = {
     },
 
     deleteCity: (req, res) => {
-        const city_id = req.params.city_id
+        const { id } = req.params
 
         sequelize.query(`
             DELETE 
             FROM cities
-            WHERE city_id = ${city_id}
+            WHERE ${id} = cities.city_id
         `)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
