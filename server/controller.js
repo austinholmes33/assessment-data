@@ -23,7 +23,7 @@ module.exports = {
             );
 
             CREATE TABLE cities (
-                id SERIAL PRIMARY KEY,
+                city_id SERIAL PRIMARY KEY,
                 name VARCHAR NOT NULL UNIQUE,
                 rating INT NOT NULL,
                 country_id INT REFERENCES countries(country_id)
@@ -262,7 +262,7 @@ module.exports = {
 
     getCities: (req, res) => {
         sequelize.query(`
-            SELECT city_id, cities.name AS city, country_id, countries.name AS country
+            SELECT city_id, cities.name AS city, rating, country_id, countries.name AS country
             FROM countries
             JOIN cities
             ON country.id = cities.country_id
