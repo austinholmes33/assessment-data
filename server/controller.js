@@ -30,9 +30,9 @@ module.exports = {
             );
 
             INSERT INTO cities (name, rating, country_id)
-            VALUES ('Mexico City', 1),
+            VALUES ('Mexico City', 1, Mexico),
             ('San Jose', 2, Costa Rica),
-            ('Beijing', 3);
+            ('Beijing', 3, China);
 
             insert into countries (name)
             values ('Afghanistan'),
@@ -270,7 +270,7 @@ module.exports = {
             FROM cities
             JOIN countries
             ON countries.country_id = cities.country_id
-            ORDER BY rating DESC
+            ORDER BY cities.rating DESC
         `)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
